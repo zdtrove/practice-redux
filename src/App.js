@@ -1,19 +1,31 @@
 import React from 'react';
-import FoodContainer from './containers/food-list';
-import FoodDetailContainer from './containers/food-detail';
+import { connect } from 'react-redux';
 
-function App() {
-    return (
-        <div className="App">
-            <h1>Redux tutorial</h1>
-            <hr />
-            <h2>List of foods: </h2>
-            <FoodContainer />
-            <hr />
-            <h2>Food details: </h2>
-            <FoodDetailContainer />
-        </div>
-    );
+class App extends React.Component {
+    render() {
+        return (
+            <div className="App">
+                <div><span>A:</span><span>{this.props.a}</span></div>
+                <button onClick={() => this.props.updateA(this.props.b)}>Update A</button>
+                <div><span>B:</span><span>{this.props.b}</span></div>
+                <button onClick={() => this.props.updateB(this.props.a)}>Update B</button>
+            </div>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        a: state.rA.a,
+        b: state.rB.b
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateA: (b) => dispatch({type: 'UPDATE_A', b: b}),
+        updateB: (a) => dispatch({type: 'UPDATE_B', a: a})
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

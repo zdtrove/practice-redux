@@ -2,12 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux'
-import allReducers from './reducers';
+import reducerA from './store/reducerA';
+import reducerB from './store/reducerB';
 import logger from 'redux-logger';
 
-const store = createStore(allReducers, applyMiddleware(logger));
+const rootReducer = combineReducers({
+    rA: reducerA,
+    rB: reducerB
+});
+
+const store = createStore(rootReducer, applyMiddleware(logger));
 
 ReactDOM.render(
     <Provider store={store}>
