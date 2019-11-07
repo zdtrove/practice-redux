@@ -1,19 +1,44 @@
 import React from 'react';
-import FoodContainer from './containers/food-list';
-import FoodDetailContainer from './containers/food-detail';
+import { connect } from 'react-redux';
 
-function App() {
-    return (
-        <div className="App">
-            <h1>Redux tutorial</h1>
-            <hr />
-            <h2>List of foods: </h2>
-            <FoodContainer />
-            <hr />
-            <h2>Food details: </h2>
-            <FoodDetailContainer />
-        </div>
-    );
+class App extends React.Component {
+    render() {
+        return (
+            <div className="App">
+                <div>Age: <span>{this.props.age}</span></div>
+                <button onClick={this.props.onAgeUp}>Age UP</button>
+                <button onClick={this.props.onAgeDown}>Age DOWN</button>
+                <hr />
+                <div>History</div>
+                <div>
+                    <ul>
+                        {
+                            this.props.history.map(el => (
+                                <li key={el.id} onClick={() => this.props.onDelItem(el.id)}>
+                                    {el.age}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+            </div>
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        age: state.age,
+        history: state.history
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAgeUp: () => dispatch({type: 'AGE_UP', value: 1}),
+        onAgeDown: () => dispatch({type: 'AGE_DOWN', value: 1}),
+        onDelItem: (id) => dispatch({type: 'DEL_ITEM', key: id})
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
